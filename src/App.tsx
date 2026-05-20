@@ -28,7 +28,6 @@ const slides = [
 ]
 
 export default function App() {
-  const [page] = useState(() => window.location.pathname)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [direction, setDirection] = useState(0)
 
