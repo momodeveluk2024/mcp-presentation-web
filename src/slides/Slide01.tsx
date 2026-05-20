@@ -7,10 +7,10 @@ interface SlideProps {
 }
 
 const teamMembers = [
-  { name: 'Ahmed Mohammad', color: '#6366f1', role: 'Lead Developer' },
-  { name: 'Ahmed Dindar', color: '#0ea5e9', role: 'AI Specialist' },
-  { name: 'Abdulmalik Kazm', color: '#10b981', role: 'Backend Engineer' },
-  { name: 'Solin Youns', color: '#f59e0b', role: 'Frontend Dev' },
+  { name: 'Ahmed Mohammad', color: '#6366f1' },
+  { name: 'Ahmed Dindar', color: '#0ea5e9' },
+  { name: 'Abdulmalik Kazm', color: '#10b981' },
+  { name: 'Solin Youns', color: '#f59e0b' },
 ]
 
 // Text that morphs from binary - FIXED
@@ -470,6 +470,7 @@ export function Slide01Title({ direction }: SlideProps) {
   const [showTitle1, setShowTitle1] = useState(false)
   const [showTitle2, setShowTitle2] = useState(false)
   const [showSubtitle, setShowSubtitle] = useState(false)
+  const [showSupervisor, setShowSupervisor] = useState(false)
   const [showTeam, setShowTeam] = useState<boolean[]>(new Array(4).fill(false))
   const [terminalLine, setTerminalLine] = useState(-1)
 
@@ -477,7 +478,8 @@ export function Slide01Title({ direction }: SlideProps) {
     '$ mcp init --protocol v2.0',
     '$ render "Controlling Web Applications"',
     '$ set method --ai-agents --mcp',
-    '$ load team.config.json',
+    '$ load project.config.json',
+    '$ project.setSupervisor("Dr. Mustafa Zuhaer")',
     '$ team.add("Ahmed Mohammad")',
     '$ team.add("Ahmed Dindar")',
     '$ team.add("Abdulmalik Kazm")',
@@ -507,10 +509,14 @@ export function Slide01Title({ direction }: SlideProps) {
       
       await delay(800)
       setTerminalLine(3)
+      await delay(600)
+      setTerminalLine(4)
+      await delay(400)
+      setShowSupervisor(true)
       
       for (let i = 0; i < 4; i++) {
         await delay(600)
-        setTerminalLine(4 + i)
+        setTerminalLine(5 + i)
         await delay(400)
         setShowTeam(prev => {
           const newArr = [...prev]
@@ -520,7 +526,7 @@ export function Slide01Title({ direction }: SlideProps) {
       }
       
       await delay(400)
-      setTerminalLine(8)
+      setTerminalLine(9)
     }, 300)
   }
 
@@ -681,77 +687,136 @@ export function Slide01Title({ direction }: SlideProps) {
               )}
             </AnimatePresence>
 
-            {/* Team */}
-            <AnimatePresence>
-              {showTeam[0] && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}
-                >
-                  <span style={{
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: '#64748b',
-                    textTransform: 'uppercase',
-                    letterSpacing: 4,
-                  }}>
-                    Presented By
-                  </span>
+            {/* Supervisor & Team */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 30 }}>
+              
+              {/* Supervisor */}
+              <AnimatePresence>
+                {showSupervisor && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}
+                  >
+                    <span style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: '#64748b',
+                      textTransform: 'uppercase',
+                      letterSpacing: 4,
+                    }}>
+                      Supervised By
+                    </span>
+                    <motion.div
+                      whileHover={{ y: -4, scale: 1.02 }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 14,
+                        background: 'rgba(255, 255, 255, 0.95)',
+                        backdropFilter: 'blur(10px)',
+                        padding: '16px 28px',
+                        borderRadius: 18,
+                        boxShadow: '0 8px 30px rgba(139, 92, 246, 0.15)',
+                        border: '2px solid rgba(139, 92, 246, 0.3)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 12,
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontWeight: 700,
+                        fontSize: 15,
+                        boxShadow: '0 6px 16px rgba(139, 92, 246, 0.3)',
+                      }}>
+                        MZ
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 800, color: '#1e293b', fontSize: 18 }}>
+                          Dr. Mustafa Zuhaer
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                  <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {teamMembers.map((member, i) => (
-                      <AnimatePresence key={member.name}>
-                        {showTeam[i] && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            transition={{ duration: 0.4 }}
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 14,
-                              background: 'rgba(255, 255, 255, 0.9)',
-                              backdropFilter: 'blur(10px)',
-                              padding: '16px 22px',
-                              borderRadius: 18,
-                              boxShadow: `0 8px 30px ${member.color}20`,
-                              border: `2px solid ${member.color}30`,
-                              cursor: 'pointer',
-                            }}
-                          >
-                            <div style={{
-                              width: 48,
-                              height: 48,
-                              borderRadius: 12,
-                              background: `linear-gradient(135deg, ${member.color}, ${member.color}cc)`,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: 'white',
-                              fontWeight: 700,
-                              fontSize: 15,
-                              boxShadow: `0 6px 16px ${member.color}40`,
-                            }}>
-                              {member.name.split(' ').map(n => n[0]).join('')}
-                            </div>
-                            <div>
-                              <div style={{ fontWeight: 700, color: '#1e293b', fontSize: 16, marginBottom: 2 }}>
-                                {member.name}
+              {/* Team */}
+              <AnimatePresence>
+                {showTeam[0] && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}
+                  >
+                    <span style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: '#64748b',
+                      textTransform: 'uppercase',
+                      letterSpacing: 4,
+                    }}>
+                      Presented By
+                    </span>
+
+                    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+                      {teamMembers.map((member, i) => (
+                        <AnimatePresence key={member.name}>
+                          {showTeam[i] && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+                              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                              transition={{ duration: 0.4 }}
+                              whileHover={{ y: -4, scale: 1.02 }}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 14,
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(10px)',
+                                padding: '16px 22px',
+                                borderRadius: 18,
+                                boxShadow: `0 8px 30px ${member.color}20`,
+                                border: `2px solid ${member.color}30`,
+                                cursor: 'pointer',
+                              }}
+                            >
+                              <div style={{
+                                width: 48,
+                                height: 48,
+                                borderRadius: 12,
+                                background: `linear-gradient(135deg, ${member.color}, ${member.color}cc)`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'white',
+                                fontWeight: 700,
+                                fontSize: 15,
+                                boxShadow: `0 6px 16px ${member.color}40`,
+                              }}>
+                                {member.name.split(' ').map(n => n[0]).join('')}
                               </div>
-                              <div style={{ fontSize: 12, color: member.color, fontWeight: 500 }}>
-                                {member.role}
+                              <div>
+                                <div style={{ fontWeight: 700, color: '#1e293b', fontSize: 16 }}>
+                                  {member.name}
+                                </div>
                               </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
